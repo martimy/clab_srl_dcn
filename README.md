@@ -5,7 +5,7 @@ This is lab builds a network tpology using Nokia [Service Router Linux](https://
 Among the main features of Nokia srlinux are:
 
 - [Open Architucture](https://documentation.nokia.com/srlinux/SR_Linux_HTML_R21-11/Configuration_Basics_Guide/configb-apps.html)
-- [Groud-up support of YANG]([https://learn.srlinux.dev/](https://learn.srlinux.dev/programmability/))
+- [Groud-up support of YANG](https://learn.srlinux.dev/programmability/)
 
 and many [others](https://learn.srlinux.dev/) 
 
