@@ -1,9 +1,13 @@
-# clab_yang_dcn
+# Data Centre Lab using Nokia Service Router Linux
 
-Data centre network using YANG.
+This is lab builds a network tpology using Nokia [Service Router Linux](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/) (srlinux). 
 
-This project is in-progress.
+Among the main features of Nokia srlinux are:
 
+- [Open Architucture](https://documentation.nokia.com/srlinux/SR_Linux_HTML_R21-11/Configuration_Basics_Guide/configb-apps.html)
+- [Groud-up support of YANG]([https://learn.srlinux.dev/](https://learn.srlinux.dev/programmability/))
+
+and many [others](https://learn.srlinux.dev/) 
 
 
 To start the lab
