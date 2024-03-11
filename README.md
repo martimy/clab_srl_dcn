@@ -40,8 +40,32 @@ $ ssh clab-ynet-srl
 To exit, type 'quit'.
 
 
+# SNMP Access
+
 To test SNMP connection:
 
 ```
 $ docker exec -it clab-ynet-mgm snmpwalk -v 2c -c linuxro 172.20.20.2
+```
+
+# JSON-RPC
+
+```
+curl http://admin:admin@clab-ynet-srl/jsonrpc -d @- << EOF
+{
+    "jsonrpc": "2.0",
+    "id": 0,
+    "method": "get",
+    "params":
+    {
+        "commands":
+        [
+            {
+                "path": "/system/information/version",
+                "datastore": "state"
+            }
+        ]
+    }
+}
+EOF
 ```
