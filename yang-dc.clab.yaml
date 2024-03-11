@@ -25,5 +25,20 @@ topology:
       image: nicolaka/netshoot
       mgmt-ipv4: 172.20.20.4
 
+    sflow:
+      kind: linux
+#      image: sflow/sflowtrend
+      image: mysflow
+      mgmt-ipv4: 172.20.20.102
+      publish:
+        - udp/6343
+        - tcp/8087
+        - tcp/8443
+      exec:
+        - ip addr add 192.168.2.2/24 dev eth1
+      env:
+        TZ: America/Halifx
+
   links:
     - endpoints: ["srl:e1-1", "frr:eth1"]
+    - endpoints: ["srl:e1-2", "sflow:eth1"]

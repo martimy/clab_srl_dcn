@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  gnmic:
+    image: ghcr.io/openconfig/gnmic:latest
+    container_name: gnmic
+    volumes:
+      - ./:/app
+    command: "subscribe --config /app/gnmic.yaml"
