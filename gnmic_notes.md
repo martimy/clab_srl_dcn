@@ -34,3 +34,4 @@ gnmic --config .gnmic.yaml -a 172.20.20.2 set \
 --update-file acl2.json
 
 
+gnmic --config gnmic.yaml set --update-path /system/sflow --update-file sflow_update.yaml
