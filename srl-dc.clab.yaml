@@ -34,8 +34,7 @@ topology:
 
     sflow:
       kind: linux
-#      image: sflow/sflowtrend
-      image: mysflow
+      image: martimy/sflow
       mgmt-ipv4: 172.20.20.102
       publish:
         - udp/6343
