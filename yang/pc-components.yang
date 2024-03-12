@@ -1,0 +1,95 @@
+module pc-components {
+  yang-version 1.1;
+  namespace "urn:example:pc-components";
+  prefix pc;
+
+  organization "Example Organization";
+  contact "contact@example.com";
+  description "YANG module for describing PC components.";
+
+  container pc {
+	  description "Personal Computer (PC) component.";
+	  
+	  // Define the main components of a PC
+
+	  // CPU component
+	  container cpu {
+		description "Central Processing Unit (CPU) component.";
+		leaf brand {
+		  type string;
+		  description "Brand of the CPU.";
+		}
+		leaf model {
+		  type string;
+		  description "Model of the CPU.";
+		}
+		leaf cores {
+		  type uint16;
+		  description "Number of CPU cores.";
+		}
+		leaf speed {
+		  type decimal64 {
+			fraction-digits 2;
+		  }
+		  description "Speed of the CPU in GHz.";
+		}
+	  }
+
+	  // Memory component
+	  container memory {
+		description "Random Access Memory (RAM) component.";
+		leaf size {
+		  type uint64;
+		  description "Size of the RAM in megabytes (MB).";
+		}
+		leaf type {
+		  type string;
+		  description "Type of memory (e.g., DDR4).";
+		}
+		leaf speed {
+		  type uint32;
+		  description "Speed of the RAM in MHz.";
+		}
+	  }
+
+	  // Storage component
+	  container storage {
+		description "Storage component (e.g., Hard Disk Drive, Solid State Drive).";
+		leaf type {
+		  type enumeration {
+			enum HDD;
+			enum SSD;
+		  }
+		  description "Type of storage (HDD or SSD).";
+		}
+		leaf capacity {
+		  type uint64;
+		  description "Capacity of the storage in gigabytes (GB).";
+		}
+	  }
+
+	  // Peripheral devices component
+	  container peripherals {
+		description "Peripheral devices connected to the PC.";
+		list device {
+		  key name;
+		  description "List of peripheral devices.";
+		  leaf name {
+			type string;
+			description "Name of the peripheral device.";
+		  }
+		  leaf type {
+			type enumeration {
+			  enum keyboard;
+			  enum mouse;
+			  enum monitor;
+			  enum printer;
+			  // Add more peripheral types as needed
+			}
+			description "Type of the peripheral device.";
+		  }
+		}
+	  }
+  }
+}
+
