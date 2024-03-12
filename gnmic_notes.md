@@ -34,3 +34,5 @@ gnmic --config .gnmic.yaml -a 172.20.20.2 set \
 --update-file acl2.json
 
 
+/interface[name=*]/sflow/admin-state
+
