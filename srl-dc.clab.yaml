@@ -2,14 +2,21 @@ name: ynet
 
 topology:
   nodes:
-    srl:
+    srl1:
       kind: nokia_srlinux
       type: ixrd1
       image: ghcr.io/nokia/srlinux:21.11.2
 # Newer but larger version
 #      image: ghcr.io/nokia/srlinux:23.7.1
-      startup-config: config/srl/srl-bgp.cfg
+      startup-config: config/srl1/srl-bgp.cfg
       mgmt-ipv4: 172.20.20.2
+
+    srl2:
+      kind: nokia_srlinux
+      type: ixrd1
+      image: ghcr.io/nokia/srlinux:21.11.2
+      startup-config: config/srl2/srl-bgp.cfg
+      mgmt-ipv4: 172.20.20.3
 
     frr:
       kind: linux
@@ -18,12 +25,12 @@ topology:
         - config/frr/daemons:/etc/frr/daemons
         - config/frr/frr.conf:/etc/frr/frr.conf
         - config/frr/vtysh.conf:/etc/frr/vtysh.conf
-      mgmt-ipv4: 172.20.20.3
+      mgmt-ipv4: 172.20.20.4
 
     mgm:
       kind: linux
       image: nicolaka/netshoot
-      mgmt-ipv4: 172.20.20.4
+      mgmt-ipv4: 172.20.20.5
 
     sflow:
       kind: linux
@@ -40,5 +47,6 @@ topology:
         TZ: America/Halifx
 
   links:
-    - endpoints: ["srl:e1-1", "frr:eth1"]
-    - endpoints: ["srl:e1-2", "sflow:eth1"]
+    - endpoints: ["srl1:e1-1", "frr:eth1"]
+    - endpoints: ["srl1:e1-2", "sflow:eth1"]
+    - endpoints: ["srl2:e1-3", "frr:eth2"]

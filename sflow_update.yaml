@@ -1,0 +1,8 @@
+sflow:
+  admin-state: enable
+  collector: 
+    collector-id: 1
+    collector-address: 192.168.2.2
+    source-address: 192.168.2.1
+    network-instance: default
+

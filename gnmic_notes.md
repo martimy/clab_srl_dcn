@@ -35,3 +35,4 @@ gnmic --config .gnmic.yaml -a 172.20.20.2 set \
 
 gnmic --config gnmic.yaml set --update-path /system/sflow --update-file sflow_update.yaml
 
+gnmic --config gnmic.yaml set --update-path /system/sflow --update-file sflow_update.yaml
