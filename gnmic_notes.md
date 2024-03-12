@@ -33,6 +33,5 @@ gnmic --config .gnmic.yaml -a 172.20.20.2 set \
 --update-path /acl/acl-sets \
 --update-file acl2.json
 
-
-/interface[name=*]/sflow/admin-state
+gnmic --config gnmic.yaml set --update-path /system/sflow --update-file sflow_update.yaml
 
