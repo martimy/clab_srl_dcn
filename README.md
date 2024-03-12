@@ -69,3 +69,6 @@ curl http://admin:admin@clab-ynet-srl/jsonrpc -d @- << EOF
 }
 EOF
 ```
+
+
+[Another configuration example](https://networkcloudandeverything.com/configuring-srlinux-nodes-in-a-3-tier-data-center/)
