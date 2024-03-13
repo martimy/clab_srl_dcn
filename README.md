@@ -86,3 +86,22 @@ Interfaces e1-1 and e1-2 are 10G, interface mgmt is 1G; all others are 100G.
 ```
 show network-instance summary
 ```
+
+Show routing table
+
+```
+show network-instance default route-table ipv4-unicast summary
+```
+
+Verify connectivity
+
+```
+ping network-instance default 10.10.10.102 
+```
+
+to verify BGP neighbours:
+
+```
+show network-instance default protocols bgp neighbor 
+```
+
