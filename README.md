@@ -28,13 +28,13 @@ $ sudo clab destroy --cleanup
 To access Nokia router:
 
 ```
-$ docker exec -it clab-ynet-srl sr_cli
+$ docker exec -it clab-srl-s1 sr_cli
 ```
 
 or
 
 ```
-$ ssh clab-ynet-srl
+$ ssh clab-srl-s1
 ```
 
 To exit, type 'quit'.
@@ -45,13 +45,13 @@ To exit, type 'quit'.
 To test SNMP connection (using default community string):
 
 ```
-$ docker exec -it clab-ynet-mgm snmpwalk -v 2c -c public 172.20.20.11
+$ docker exec -it clab-srl-mgm snmpwalk -v 2c -c public 172.20.20.11
 ```
 
 # JSON-RPC
 
 ```
-curl http://admin:admin@clab-ynet-s1/jsonrpc -d @- << EOF
+curl http://admin:admin@clab-srl-s1/jsonrpc -d @- << EOF
 {
     "jsonrpc": "2.0",
     "id": 0,
@@ -109,12 +109,12 @@ show network-instance default protocols bgp neighbor
 Verify connectivity from a host to another
 
 ```
-$ docker exec -it clab-ynet-h1 ping 192.168.3.101
+$ docker exec -it clab-srl-h1 ping 192.168.3.101
 ```
 
 or using host names:
 
 ```
-$ docker exec -it clab-ynet-h1 ping h3 
+$ docker exec -it clab-srl-h1 ping h3 
 ```
 
