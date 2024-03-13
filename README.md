@@ -1,6 +1,6 @@
 # Data Centre Lab using Nokia Service Router Linux
 
-This is lab builds a network tpology using Nokia [Service Router Linux](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/) (srlinux) and Conatinerlab. 
+This is lab builds a network tpology using Nokia [Service Router Linux](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/) (srlinux) and Conatinerlab.
 
 Among the main features of Nokia srlinux are:
 
@@ -31,7 +31,7 @@ To access Nokia router:
 $ docker exec -it clab-ynet-srl sr_cli
 ```
 
-or 
+or
 
 ```
 $ ssh clab-ynet-srl
@@ -72,3 +72,17 @@ EOF
 
 
 [Another configuration example](https://networkcloudandeverything.com/configuring-srlinux-nodes-in-a-3-tier-data-center/)
+
+
+# configuration Notes
+
+```
+show interface brief
+```
+
+The hardware type 'ixrd3' has 34 interfaces and one management interface.
+Interfaces e1-1 and e1-2 are 10G, interface mgmt is 1G; all others are 100G.
+
+```
+show network-instance summary
+```
