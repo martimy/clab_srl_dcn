@@ -93,15 +93,28 @@ Show routing table
 show network-instance default route-table ipv4-unicast summary
 ```
 
-Verify connectivity
+Verify connectivity from a router
 
 ```
 ping network-instance default 10.10.10.102 
 ```
 
+
 to verify BGP neighbours:
 
 ```
 show network-instance default protocols bgp neighbor 
+```
+
+Verify connectivity from a host to another
+
+```
+$ docker exec -it clab-ynet-h1 ping 192.168.3.101
+```
+
+or using host names:
+
+```
+$ docker exec -it clab-ynet-h1 ping h3 
 ```
 
