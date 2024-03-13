@@ -64,6 +64,26 @@ topology:
         - ip route replace default via 192.168.3.1 dev eth1
       group: server
 
+    mgm:
+      kind: linux
+      image: nicolaka/netshoot
+      mgmt-ipv4: 172.20.20.101
+      group: 1
+ 
+    sflow:
+      kind: linux
+#      image: sflow/sflowtrend
+      image: martimy/sflow
+      mgmt-ipv4: 172.20.20.102
+      publish:
+        - udp/6343
+        - tcp/8087
+        - tcp/8443
+      exec:
+        - ip addr add 192.168.2.2/24 dev eth1
+      env:
+        TZ: America/Halifx
+             
   links:
     - endpoints: ["s1:e1-11", "l1:e1-11"]
     - endpoints: ["s1:e1-12", "l2:e1-11"]

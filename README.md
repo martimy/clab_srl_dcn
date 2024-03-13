@@ -42,16 +42,16 @@ To exit, type 'quit'.
 
 # SNMP Access
 
-To test SNMP connection:
+To test SNMP connection (using default community string):
 
 ```
-$ docker exec -it clab-ynet-mgm snmpwalk -v 2c -c linuxro 172.20.20.2
+$ docker exec -it clab-ynet-mgm snmpwalk -v 2c -c public 172.20.20.11
 ```
 
 # JSON-RPC
 
 ```
-curl http://admin:admin@clab-ynet-srl/jsonrpc -d @- << EOF
+curl http://admin:admin@clab-ynet-s1/jsonrpc -d @- << EOF
 {
     "jsonrpc": "2.0",
     "id": 0,
