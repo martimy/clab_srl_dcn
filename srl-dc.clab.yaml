@@ -68,13 +68,14 @@ topology:
       kind: linux
       image: nicolaka/netshoot
       mgmt-ipv4: 172.20.20.101
-      group: 1
+      group: server
  
     sflow:
       kind: linux
 #      image: sflow/sflowtrend
       image: martimy/sflow
       mgmt-ipv4: 172.20.20.102
+      gorup: server
       publish:
         - udp/6343
         - tcp/8087
