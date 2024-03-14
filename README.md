@@ -80,8 +80,10 @@ EOF
 show interface brief
 ```
 
-The hardware type 'ixrd3' has 34 interfaces and one management interface.
-Interfaces e1-1 and e1-2 are 10G, interface mgmt is 1G; all others are 100G.
+The hardware type 'ixrd1' has 52 interfaces and one management interface.
+Interfaces e1-1 to e1-48 are 1G, interfaces e1-49 to e1-52 are 10G, interface mgmt is 1G.
+
+Here is a list of hardward
 
 ```
 show network-instance summary
