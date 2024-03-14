@@ -112,9 +112,4 @@ Verify connectivity from a host to another
 $ docker exec -it clab-srl-h1 ping 192.168.3.101
 ```
 
-or using host names:
-
-```
-$ docker exec -it clab-srl-h1 ping h3 
-```
 

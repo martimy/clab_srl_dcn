@@ -75,12 +75,12 @@ topology:
 #      image: sflow/sflowtrend
       image: martimy/sflow
       mgmt-ipv4: 172.20.20.102
-      gorup: server
+      group: server
       publish:
         - udp/6343
         - tcp/8087
         - tcp/8443
-      exec:
+      exec: # not connected anywhere for now
         - ip addr add 192.168.2.2/24 dev eth1
       env:
         TZ: America/Halifx
