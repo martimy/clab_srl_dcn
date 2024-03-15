@@ -6,10 +6,13 @@ Among the main features of Nokia srlinux are:
 
 - [Open Architucture](https://documentation.nokia.com/srlinux/SR_Linux_HTML_R21-11/Configuration_Basics_Guide/configb-apps.html)
 - [Groud-up support of YANG](https://learn.srlinux.dev/programmability/)
+- and [others](https://learn.srlinux.dev/).
 
-and many [others](https://learn.srlinux.dev/).
+Nokia SRLinux can be managed with CLI, gNMI, JSON-RPC, and SNMP.
 
 For more information about creating Containerlab topologies using srlinux, consult [this](https://containerlab.dev/manual/kinds/srl/#__tabbed_1_5).
+
+## Accessing the lab
 
 To start the lab
 
