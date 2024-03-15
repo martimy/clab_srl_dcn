@@ -9,7 +9,8 @@ The main features of Nokia srlinux can be found [here](https://learn.srlinux.dev
 
 Nokia SRLinux can be managed with CLI, gNMI, JSON-RPC, and SNMP.
 
-Here are link to [documentation](https://documentation.nokia.com/srlinux/index.html). This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/index.html). 
+Here is the link to [documentation](https://documentation.nokia.com/srlinux/index.html). This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/index.html).
+
 For more information about creating Containerlab topologies using srlinux, consult [this](https://containerlab.dev/manual/kinds/srl/#__tabbed_1_5).
 
 ## Accessing the lab
@@ -101,14 +102,14 @@ show network-instance default route-table ipv4-unicast summary
 Verify connectivity from a router
 
 ```
-ping network-instance default 10.10.10.102 
+ping network-instance default 10.10.10.102
 ```
 
 
 to verify BGP neighbours:
 
 ```
-show network-instance default protocols bgp neighbor 
+show network-instance default protocols bgp neighbor
 ```
 
 Verify connectivity from a host to another
@@ -116,5 +117,3 @@ Verify connectivity from a host to another
 ```
 $ docker exec -it clab-srl-h1 ping 192.168.3.101
 ```
-
-
