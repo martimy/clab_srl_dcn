@@ -2,14 +2,14 @@
 
 This is lab builds a network tpology using Nokia [Service Router Linux](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/) (srlinux) and Conatinerlab.
 
-Among the main features of Nokia srlinux are:
+The main features of Nokia srlinux can be found [here](https://learn.srlinux.dev/) and they include:
 
 - [Open Architucture](https://documentation.nokia.com/srlinux/SR_Linux_HTML_R21-11/Configuration_Basics_Guide/configb-apps.html)
 - [Groud-up support of YANG](https://learn.srlinux.dev/programmability/)
-- and [others](https://learn.srlinux.dev/).
 
 Nokia SRLinux can be managed with CLI, gNMI, JSON-RPC, and SNMP.
 
+Here are link to [documentation](https://documentation.nokia.com/srlinux/index.html). This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/index.html). 
 For more information about creating Containerlab topologies using srlinux, consult [this](https://containerlab.dev/manual/kinds/srl/#__tabbed_1_5).
 
 ## Accessing the lab
