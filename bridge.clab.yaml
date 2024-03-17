@@ -3,19 +3,25 @@ name: srl
 topology:
   defaults:
     kind: nokia_srlinux
-    type: ixrd1
+#    type: ixrd1 # smallest
+    type: ixrd3 # Allows tunnel-interface
     image: ghcr.io/nokia/srlinux:21.11.2
 
   nodes:
     r1:
-      startup-config: config/srl-r1.cfg
+      startup-config: config/srl-r1v.cfg
       mgmt-ipv4: 172.20.20.11
-      group: spine
+      group: leaf
 
     r2:
       startup-config: config/srl-r2.cfg
       mgmt-ipv4: 172.20.20.12
       group: spine
+
+    r3:
+      startup-config: config/srl-r3v.cfg
+      mgmt-ipv4: 172.20.20.13
+      group: leaf
 
     h1:
       kind: linux
@@ -53,13 +59,35 @@ topology:
         - ip route replace default via 192.168.1.1 dev eth1
       group: server
 
+    h5:
+      kind: linux
+      image: akpinar/alpine:latest
+      mgmt-ipv4: 172.20.20.55
+      exec:
+        - ip addr add 192.168.2.11/24 dev eth1
+        - ip route replace default via 192.168.2.1 dev eth1
+      group: server
+
+    h6:
+      kind: linux
+      image: akpinar/alpine:latest
+      mgmt-ipv4: 172.20.20.56
+      exec:
+        - ip addr add 192.168.3.11/24 dev eth1
+        - ip route replace default via 192.168.3.1 dev eth1
+      group: server
+
   links:
     - endpoints: ["r1:e1-11", "r2:e1-11"]
+    - endpoints: ["r3:e1-11", "r2:e1-12"]
 
     - endpoints: ["r1:e1-21", "h1:eth1"]
     - endpoints: ["r1:e1-22", "h2:eth1"]
-    - endpoints: ["r2:e1-21", "h3:eth1"]
-    - endpoints: ["r2:e1-22", "h4:eth1"]
+    - endpoints: ["r1:e1-23", "h5:eth1"]
+
+    - endpoints: ["r3:e1-21", "h3:eth1"]
+    - endpoints: ["r3:e1-22", "h4:eth1"]
+    - endpoints: ["r3:e1-23", "h6:eth1"]
 
 mgmt:
   ipv4-subnet: 172.20.20.0/24

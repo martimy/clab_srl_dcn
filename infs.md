@@ -38,3 +38,10 @@ IRB Interfaces link MAC-VRF and IP-VRF instances for Layer 2 traffic tunneling a
 ```
 show network-instance MYNET route-table all
 ```
+
+The bgp-evpn configuration is not possible on network-instance of type default.
+the system0 interface can only be associated with network-instance default
+
+# EVPN
+
+EVPN is an extension to BGP that allows the network to carry endpoint reachability information such as Layer 2 MAC addresses and Layer 3 IP addresses. EVPN also provides multipath forwarding and redundancy through an all-active multihoming model. An endpoint or device can connect to two or more upstream devices and forward traffic using all the links. If a link or device fails, traffic continues to flow using the remaining active links.

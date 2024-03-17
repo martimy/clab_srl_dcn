@@ -1,22 +1,27 @@
+# Define the containerlab topology named "srl"
 name: srl
 
+# Define default settings for nodes in the topology
 topology:
   defaults:
-    kind: nokia_srlinux
-    type: ixrd1
-    image: ghcr.io/nokia/srlinux:21.11.2
+    kind: nokia_srlinux  # Specify the kind of nodes as Nokia SR Linux
+    type: ixrd3  # Specify the type of SR Linux nodes
+    image: ghcr.io/nokia/srlinux:21.11.2  # Specify the Docker image for SR Linux nodes
 
+  # Define individual nodes in the topology
   nodes:
+    # Spine switches
     s1:
-      startup-config: config/srl-s1.cfg
-      mgmt-ipv4: 172.20.20.11
-      group: spine
+      startup-config: config/srl-s1.cfg  # Specify the startup configuration file for s1
+      mgmt-ipv4: 172.20.20.11  # Management IPv4 address for s1
+      group: spine  # Group s1 under the spine category
 
     s2:
       startup-config: config/srl-s2.cfg
       mgmt-ipv4: 172.20.20.12
       group: spine
 
+    # Leaf switches
     l1:
       startup-config: config/srl-l1.cfg
       mgmt-ipv4: 172.20.20.21
@@ -32,74 +37,89 @@ topology:
       mgmt-ipv4: 172.20.20.23
       group: leaf
 
+    # Border switch
     b1:
       startup-config: config/srl-b1.cfg
       mgmt-ipv4: 172.20.20.31
       group: leaf
 
+    # Servers
     h1:
       kind: linux
       image: akpinar/alpine:latest
-      mgmt-ipv4: 172.20.20.51
       exec:
         - ip addr add 192.168.1.11/24 dev eth1
         - ip route replace default via 192.168.1.1 dev eth1
       group: server
-      
+
     h2:
       kind: linux
       image: akpinar/alpine:latest
-      mgmt-ipv4: 172.20.20.52
+      exec:
+        - ip addr add 192.168.1.12/24 dev eth1
+        - ip route replace default via 192.168.1.1 dev eth1
+      group: server
+
+    h3:
+      kind: linux
+      image: akpinar/alpine:latest
+      exec:
+        - ip addr add 192.168.1.13/24 dev eth1
+        - ip route replace default via 192.168.1.1 dev eth1
+      group: server
+
+    h4:
+      kind: linux
+      image: akpinar/alpine:latest
       exec:
         - ip addr add 192.168.2.11/24 dev eth1
         - ip route replace default via 192.168.2.1 dev eth1
       group: server
-      
-    h3:
-      kind: linux
-      image: akpinar/alpine:latest
-      mgmt-ipv4: 172.20.20.53
-      exec:
-        - ip addr add 192.168.3.11/24 dev eth1
-        - ip route replace default via 192.168.3.1 dev eth1
-      group: server
 
-    mgm:
-      kind: linux
-      image: nicolaka/netshoot
-      mgmt-ipv4: 172.20.20.101
-      group: server
- 
+    # sFlow collector
     sflow:
       kind: linux
-#      image: sflow/sflowtrend
       image: martimy/sflow
-      mgmt-ipv4: 172.20.20.102
+      mgmt-ipv4: 172.20.20.101
       group: server
       publish:
         - udp/6343
         - tcp/8087
         - tcp/8443
-      exec: # not connected anywhere for now
+      exec:
         - ip addr add 192.168.2.2/24 dev eth1
       env:
-        TZ: America/Halifx
-             
+        TZ: America/Halifax  # Set the timezone for sFlow collector
+
+    # Management node
+    mgm:
+      kind: linux
+      image: nicolaka/netshoot
+      mgmt-ipv4: 172.20.20.201
+      group: server
+
+  # Define links between nodes
   links:
+    # Spine 1 to leaves and border
     - endpoints: ["s1:e1-11", "l1:e1-11"]
     - endpoints: ["s1:e1-12", "l2:e1-11"]
     - endpoints: ["s1:e1-13", "l3:e1-11"]
     - endpoints: ["s1:e1-21", "b1:e1-11"]
 
+    # Spine 2 to leaves and border
     - endpoints: ["s2:e1-11", "l1:e1-12"]
     - endpoints: ["s2:e1-12", "l2:e1-12"]
     - endpoints: ["s2:e1-13", "l3:e1-12"]
     - endpoints: ["s2:e1-21", "b1:e1-12"]
 
+    # Leaves to hosts
     - endpoints: ["l1:e1-21", "h1:eth1"]
     - endpoints: ["l2:e1-21", "h2:eth1"]
-    - endpoints: ["l3:e1-21", "h3:eth1"]
+    - endpoints: ["l2:e1-22", "h3:eth1"]
+    - endpoints: ["l3:e1-21", "h4:eth1"]
+    - endpoints: ["b1:e1-21", "sflow:eth1"]
 
+# Define management subnet information
 mgmt:
   ipv4-subnet: 172.20.20.0/24
   ipv6-subnet: 2001:172:20::/80
