@@ -87,7 +87,8 @@ topology:
         - tcp/8087
         - tcp/8443
       exec:
-        - ip addr add 192.168.2.2/24 dev eth1
+        - ip addr add 192.168.3.11/24 dev eth1
+        - ip route replace default via 192.168.3.1 dev eth1
       env:
         TZ: America/Halifax  # Set the timezone for sFlow collector
 
