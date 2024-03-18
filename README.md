@@ -9,11 +9,14 @@ The main features of Nokia srlinux can be found [here](https://learn.srlinux.dev
 
 Nokia SRLinux can be managed with CLI, gNMI, JSON-RPC, and SNMP.
 
-Here is the link to [documentation](https://documentation.nokia.com/srlinux/index.html). This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/index.html).
+Here is the link to [router documentation](https://documentation.nokia.com/srlinux/index.html). This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/index.html).
 
 For more information about creating Containerlab topologies using srlinux, consult [this](https://containerlab.dev/manual/kinds/srl/#__tabbed_1_5).
 
+
 ![Lab Topology](docs/spineleaf.png)
+
+The lab documentation is [here](docs/index.md)
 
 ## Accessing the lab
 
@@ -75,10 +78,6 @@ curl http://admin:admin@clab-srl-s1/jsonrpc -d @- << EOF
 }
 EOF
 ```
-
-
-[Another configuration example](https://networkcloudandeverything.com/configuring-srlinux-nodes-in-a-3-tier-data-center/)
-
 
 # configuration Notes
 
