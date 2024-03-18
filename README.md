@@ -13,6 +13,8 @@ Here is the link to [documentation](https://documentation.nokia.com/srlinux/inde
 
 For more information about creating Containerlab topologies using srlinux, consult [this](https://containerlab.dev/manual/kinds/srl/#__tabbed_1_5).
 
+![Lab Topology](docs/spineleaf.png)
+
 ## Accessing the lab
 
 To start the lab

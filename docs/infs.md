@@ -1,4 +1,11 @@
+# Configuration Overview
+
+This is still work in-progress.
+
+![Topology](spineleaf.png)
+
 Here is a summary of available interfaces and network instances:
+
 
 ## Interfaces:
 
