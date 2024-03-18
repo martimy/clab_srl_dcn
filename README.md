@@ -1,5 +1,7 @@
 # Data Centre Lab using Nokia Service Router Linux
 
+[![Static Badge](https://img.shields.io/badge/Docs-github.io-blue)](https://martimy.github.io/clab_srl_dcn)
+
 This is lab builds a network tpology using Nokia [Service Router Linux](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/) (srlinux) and Conatinerlab.
 
 The main features of Nokia srlinux can be found [here](https://learn.srlinux.dev/) and they include:
