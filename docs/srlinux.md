@@ -1,4 +1,4 @@
-# Introduction to Nokia Service Router Linux
+# Introduction to Nokia SR Linux
 
 Nokia Service Router Linux (SR Linux) is an open and extensible network operating system (NOS). Here are the features of SR Linux:
 
