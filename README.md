@@ -20,7 +20,7 @@ For more information about creating Containerlab topologies using srlinux, consu
 
 The lab documentation is [here](docs/index.md)
 
-## Usage
+# Starting and stopping the lab
 
 
 This lab includes two topologies. 
@@ -50,52 +50,67 @@ $ sudo clab destroy -t tiny.clab.yaml --cleanup
 ```
 
 
-To access Nokia router:
+# Nokia Switch Access
 
-```
-$ docker exec -it clab-srl-s1 sr_cli
-```
+1. CLI Access
 
-or
+    ```
+    $ docker exec -it clab-srl-s1 sr_cli
+    ```
 
-```
-$ ssh clab-srl-s1
-```
+2. SSH Access
+
+    ```
+    $ ssh clab-srl-s1
+    ```
 
 To exit, type 'quit'.
 
 
-# SNMP Access
+3. SNMP Connectivity
 
-To test SNMP connection (using default community string):
+    To test SNMP connection (using default community string):
+    
+    ```
+    $ docker exec -it clab-srl-mgm snmpwalk -v 2c -c public 172.20.20.11
+    ```
 
-```
-$ docker exec -it clab-srl-mgm snmpwalk -v 2c -c public 172.20.20.11
-```
+4. JSON-RPC Connectivity
 
-# JSON-RPC
-
-```
-curl http://admin:admin@clab-srl-s1/jsonrpc -d @- << EOF
-{
-    "jsonrpc": "2.0",
-    "id": 0,
-    "method": "get",
-    "params":
+    ```
+    curl http://admin:admin@clab-srl-s1/jsonrpc -d @- << EOF
     {
-        "commands":
-        [
-            {
-                "path": "/system/information/version",
-                "datastore": "state"
-            }
-        ]
+        "jsonrpc": "2.0",
+        "id": 0,
+        "method": "get",
+        "params":
+        {
+            "commands":
+            [
+                {
+                    "path": "/system/information/version",
+                    "datastore": "state"
+                }
+            ]
+        }
     }
-}
-EOF
+    EOF
+    ```
+## Host access
+
+Depending on the type of host container used, you may execute commands diractly via Docker:
+
+```
+$ docker exec -it clab-srl-h1 ping 192.168.3.101
 ```
 
-# configuration Notes
+or, to login in:
+
+```
+$ docker exec -it clab-srl-h1 bash
+```
+
+# Misc show commands
 
 ```
 show interface brief
@@ -111,16 +126,16 @@ Show routing table
 show network-instance default route-table ipv4-unicast summary
 ```
 
-Verify connectivity from a router
-
-```
-ping network-instance default 10.10.10.102
-```
-
 to verify BGP neighbours:
 
 ```
 show network-instance default protocols bgp neighbor
+```
+
+Verify connectivity from a router (running mode)
+
+```
+ping network-instance default 10.10.10.102
 ```
 
 Verify connectivity from a host to another
