@@ -28,7 +28,6 @@ topology:
       image: akpinar/alpine:latest
       exec:
         - ip addr add 192.168.1.11/24 dev eth1
-        - ip route replace default via 192.168.1.1 dev eth1
       group: server
 
     h2:
@@ -36,7 +35,6 @@ topology:
       image: akpinar/alpine:latest
       exec:
         - ip addr add 192.168.1.12/24 dev eth1
-        - ip route replace default via 192.168.1.1 dev eth1
       group: server
 
   links:
