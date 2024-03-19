@@ -20,20 +20,34 @@ For more information about creating Containerlab topologies using srlinux, consu
 
 The lab documentation is [here](docs/index.md)
 
-## Accessing the lab
+## Usage
 
-To start the lab
+
+This lab includes two topologies. 
+
+To start the lab's main topology:
 
 ```
-$ sudo clab deploy
+$ sudo clab deploy -t srl-dc.clab.yaml
 ```
 
 To stop the lab
 
 ```
-$ sudo clab destroy --cleanup
+$ sudo clab destroy -t srl-dc.clab.yaml --cleanup
 ```
 
+To start the lab's secondary (smaller) topology:
+
+```
+$ sudo clab deploy -t tiny.clab.yaml
+```
+
+To stop the lab
+
+```
+$ sudo clab destroy -t tiny.clab.yaml --cleanup
+```
 
 
 To access Nokia router:
