@@ -87,11 +87,6 @@ EOF
 show interface brief
 ```
 
-The hardware type 'ixrd1' has 52 interfaces and one management interface.
-Interfaces e1-1 to e1-48 are 1G, interfaces e1-49 to e1-52 are 10G, interface mgmt is 1G.
-
-Here is a list of hardward
-
 ```
 show network-instance summary
 ```
@@ -107,7 +102,6 @@ Verify connectivity from a router
 ```
 ping network-instance default 10.10.10.102
 ```
-
 
 to verify BGP neighbours:
 
