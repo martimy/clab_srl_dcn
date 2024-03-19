@@ -2,9 +2,13 @@
 
 This is still work in-progress.
 
+This configuration is based on the following:
+
+- [Nokia Tutorial](https://learn.srlinux.dev/tutorials/)
+- [Another Tutorial](https://networkcloudandeverything.com/configuring-srlinux-nodes-in-a-3-tier-data-center/)
+
 ![Topology](spineleaf.png)
 
-[Another configuration example](https://networkcloudandeverything.com/configuring-srlinux-nodes-in-a-3-tier-data-center/)
 
 
 ## Lab Topology
@@ -26,18 +30,20 @@ The goal of the configuration is to allow connectivity among all servers over th
 
 The following is the description of the configuration procedure. The procedure is divided into three stages:
 
-- Configuration of eBGP with load-balancing among all switches
-- Configuration of iBGP EVPN overlay
-- Configuration of VxLANs
+- Fabric Configuration
+- EVPN Configuration
+- VxLAN Configuration
 
 Notes:
 
 - The bgp-evpn configuration is not possible on network-instance of type default.
 - the system0 interface can only be associated with network-instance default
 
-### eBGP Configuration
+### Fabric Configuration
 
-In this stage, we need to configure BGP between five autonomous systems (AS). One AS includes the spine switches. Each of the other ASs includes one leaf or border switch. The purpose of configure eBGP is to create an underlay infrastructure that share all *system0* (loopback) IP addresses that will be used later.
+Prior to configuring EVPN based overlay, a routing protocol needs to be deployed in the fabric to advertise the reachability of all the leaf VXLAN Termination End Point (VTEP) addresses throughout the IP fabric.
+
+Therefore, we need to configure BGP between five autonomous systems (AS). One AS includes the spine switches. Each of the other ASs includes one leaf or border switch. The purpose of configure eBGP is to create an underlay infrastructure that share all *system0* (loopback) IP addresses that will be used later.
 
 The configuration includes the following steps (order is not import as long as all steps are completed before committing the configuration):
 
