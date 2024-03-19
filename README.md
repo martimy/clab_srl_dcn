@@ -98,17 +98,25 @@ To exit, type 'quit'.
     ```
 ## Host access
 
-Depending on the type of host container used, you may execute commands diractly via Docker:
+Depending on the type of host container used, you may be able to:
 
-```
-$ docker exec -it clab-srl-h1 ping 192.168.3.101
-```
+- execute commands diractly via Docker:
 
-or, to login in:
+    ```
+    $ docker exec -it clab-srl-h1 ping 192.168.3.101
+    ```
 
-```
-$ docker exec -it clab-srl-h1 bash
-```
+- or, access the shell:
+
+    ```
+    $ docker exec -it clab-srl-h1 bash
+    ```
+
+- or log in via ssh (use admin/admin)
+
+    ```
+    $ ssh admin@clab-tiny-h2
+    ```
 
 # Misc show commands
 
