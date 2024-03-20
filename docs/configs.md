@@ -119,3 +119,73 @@ The configuration of VxLAN is different for each router. In summary, we will nee
 - A MAC-VRF instance configured in leaf1 and leaf2 to connect the servers attached to these leaves in one broadcast domain.
 - An Integrated routing and bridging (irb) interface in leaf1 to allow inter-subnet L3 connectivity.
 
+
+### Verification and Troubleshooting
+
+
+Ensure that a BGP session is established:
+
+```
+# /show network-instance default protocols bgp neighbor <neighbor>
+```
+
+To verify the tunnel interface configuration:
+
+```
+# /show tunnel-interface vxlan-interface brief
+```
+
+For the bridge table:
+
+```
+# /show network-instance vrf-1 bridge-table mac-table all
+```
+
+Once configured, the bgp-vpn instance can be checked to have the RT/RD values set:
+
+```
+# /show network-instance vrf-1 protocols bgp-vpn bgp-instance 1
+```
+
+When the BGP-EVPN is configured in the mac-vrf instance, the leafs start to exchange EVPN routes, which we can verify with the following commands:
+
+```
+# /show network-instance default protocols bgp neighbor <neighbor>
+```
+
+The IMET/RT3 routes can be viewed in summary and detailed modes:
+
+```
+# /show network-instance default protocols bgp routes evpn route-type 3 summary
+```
+
+```
+# /show network-instance default protocols bgp routes evpn route-type 3 detail
+```
+
+When the IMET routes from leaf2 are imported for vrf-1 network-instance, the corresponding multicast VXLAN destinations are added and can be checked with the following command:
+
+```
+# show tunnel-interface vxlan1 vxlan-interface 1 bridge-table multicast-destinations destination * 
+```
+
+
+After receiving EVPN routes from the remote leafs with VXLAN encapsulation5, SR Linux creates VXLAN tunnels towards remote VTEP, whose address is received in EVPN IMET routes. The state of a single remote VTEP we have in our lab is shown below from the leaf1 switch.
+
+```
+# /show tunnel vxlan-tunnel all
+```
+
+Once a VTEP is created in the vxlan-tunnel table with a non-zero allocated index6, an entry in the tunnel-table is also created for the tunnel.
+
+```
+# /show network-instance default tunnel-table all
+```
+
+When the leafs exchanged only EVPN IMET routes they build the BUM flooding tree (aka multicast destinations), but unicast destinations are yet unknown, which is checked with the command below:
+
+```
+# show tunnel-interface vxlan1 vxlan-interface 1 bridge-table unicast-destinations destination *
+```
+
+
