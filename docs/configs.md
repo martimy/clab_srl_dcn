@@ -71,7 +71,7 @@ The configuration includes the following steps (order is not import as long as a
     S2 -- L4 | 10.10.10.20/24
     S2 -- B1 | 10.10.10.104/24
 
-- Define the *default* network instance and add all interfaces to it.
+- Define the *default* network instance and add the system and network interfaces to it.
 - Configure a routing policy to allow the exchange of the above addresses.
 - Configure BGP:
    - Define the local AS number:
@@ -93,7 +93,7 @@ At the end of this stage, you should be able to see all BGP neighbours and the a
 
 ### EVPN Configuration
 
-The previous configuration enable us to establish iBGP EVPN sessions between the Leaf and Spine routers. In this stage we create iBGP configuration by including all routers in one AS (65500). The configuration for all routers will be the same but spine will be used also as route reflectors.
+The previous configuration enables us to establish iBGP EVPN sessions between the Leaf and Spine routers. In this stage we create iBGP configuration by including all routers in one AS (65500). The configuration for all routers will be the same but spine will be used also as route reflectors.
 
 Follow these steps in leaf and border switches:
 
@@ -109,3 +109,13 @@ In the spine switches:
   - assign it a transport local-address (use system0.0)
   - define rule-reflector
 - define all leaf and border switches neighbours in the peer group
+
+### VxLAN Configuration
+
+The configuration of VxLAN is different for each router. In summary, we will need:
+
+- Network interfaces to servers connected to the leaf and border routers.
+- A VxLAN tunnel in all leaf and border routers.
+- A MAC-VRF instance configured in leaf1 and leaf2 to connect the servers attached to these leaves in one broadcast domain.
+- An Integrated routing and bridging (irb) interface in leaf1 to allow inter-subnet L3 connectivity.
+
