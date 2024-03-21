@@ -24,3 +24,20 @@ Integration of EVPN with VxLAN enables operators to create virtual networks from
 A notable feature of EVPN is its control plane MAC address learning mechanism, where MAC address learning between PE routers occurs in the control plane rather than the data plane. This method, facilitated by MP-BGP, enhances scalability and enables various useful features provided by EVPN.
 
 Applications of these technologies include interconnecting geographically dispersed data centers, facilitating workload mobility, supporting multi-tenancy, and creating scalable overlay networks.
+
+## RDs and RTs
+
+VRFs allow IP address space to be reused among isolated routing domains. For example, if three customer are using the same 192.168.0.0/24 as their local network, we can assign each customer its own VRF so that the overlapping networks are kept isolated from one another in their respective routing domains.
+
+This works well, but we need a way to keep track of which 192.168.0.0/24 route belongs to which customer. This is where route distinguishers come in. As its name implies, a route distinguisher (RD) distinguishes one set of routes (one VRF) from another. It is a unique number prepended to each route within a VRF to identify it as belonging to that particular VRF or customer. An RD is carried along with a route via MP-BGP when exchanging VPN routes with other PE routers.
+
+Each RD makes the same IP prefix unique by appending an 8-byte RD value to the customer's IPv4 prefix. This results in a VPNv4 prefix that is unique across the service provider's network, which allows the provider's routers to store routes from different customers (even with overlapping IP addresses) in their BGP tables.
+
+On the other hand, RTs are used to control which routes are imported and exported from a VRF. When a route is exported from a VRF, the RT value is added to the route as a BGP extended community. When the route is received on another PE router, the RT value is examined to determine which VRFs should import the route.
+
+Whereas route distinguishers are used to maintain uniqueness among identical routes in different VRFs, route targets can be used to share routes among them. We can apply route targets to a VRF to control the import and export of routes among it and other VRFs.
+
+A route target takes the form of an extended BGP community with a structure similar to that of a route distinguisher (which is probably why the two are so easily confused).
+
+
+- [Reference 1.](https://packetlife.net/blog/2013/jun/10/route-distinguishers-and-route-targets/)
