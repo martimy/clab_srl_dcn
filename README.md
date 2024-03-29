@@ -117,6 +117,26 @@ Depending on the type of host container used, you may be able to:
     ```
     $ ssh admin@clab-tiny-h2
     ```
+# Traffic capture
+
+To capture traffic from one of the hosts:
+
+```
+docker exec clab-tiny-h1 tshark -i eth1
+```
+
+To capture traffic on links between routers, attach a container to one of the links:
+
+```
+docker run -it --rm --privileged --net container:clab-tiny-r2 akpinar/alpine:lat
+est tshark -i e1-12
+```
+
+or 
+
+```
+docker run -it --rm --net container:clab-tiny-r2 nicolaka/netshoot tshark -i e1-12
+```
 
 # Misc show commands
 
