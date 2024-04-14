@@ -2,18 +2,9 @@
 
 This is still work in-progress.
 
-This configuration is based on the following:
+## Main Lab Topology
 
-- [Nokia Tutorial](https://learn.srlinux.dev/tutorials/)
-- [Another Tutorial](https://networkcloudandeverything.com/configuring-srlinux-nodes-in-a-3-tier-data-center/)
-
-![Topology](spineleaf.png)
-
-
-
-## Lab Topology
-
-The default lab configuration creates a Data Centre fabric using BGP, EVPN, and VxLAN technologies. Here is a description of the overall topology:
+The main clab configuration file creates a Data Centre fabric using BGP, EVPN, and VxLAN technologies. Here is a description of the overall topology:
 
 - The DC consists of two spine switches, three leaf switches, and one border switch.
 - There are five servers connected to the leaf switches as follows:
@@ -21,12 +12,15 @@ The default lab configuration creates a Data Centre fabric using BGP, EVPN, and 
    - Server2 and Server3 are connected to Leaf2
    - Server4 is connected to Leaf3
    - Server5 is connected to Border1
-- Server1-3 reside on the same subnet and the need to communicate at layer 2
+- Servers 1 to 3 reside on the same subnet and the need to communicate at layer 2
 - Server4 and Server5 are on separate subnets
+- Server5 is designated as an sFlow server. Information about its usage will be added to the documentation later.
 
 The goal of the configuration is to allow connectivity among all servers over the DC fabric.
 
-## Configuration workflow
+![Main Lab Topology](spine_leaf_main.png)
+
+## Configuration Workflow
 
 The following is the description of the configuration procedure. The procedure is divided into three stages:
 
@@ -98,14 +92,14 @@ The previous configuration enables us to establish iBGP EVPN sessions between th
 Follow these steps in leaf and border switches:
 
 - define a BGP group of type evpn and
-  - assign it a local AS 65600.
+  - assign it a local AS 65500.
   - assign it a transport local-address (use system0.0)
 - define the two spine switches as neighbours in the peer group
 
 In the spine switches:
 
 - define a BGP peer-group of type evpn and
-  - assign it a local AS 65600.
+  - assign it a local AS 65500.
   - assign it a transport local-address (use system0.0)
   - define rule-reflector
 - define all leaf and border switches neighbours in the peer group
@@ -118,6 +112,15 @@ The configuration of VxLAN is different for each router. In summary, we will nee
 - A VxLAN tunnel in all leaf and border routers.
 - A MAC-VRF instance configured in leaf1 and leaf2 to connect the servers attached to these leaves in one broadcast domain.
 - An Integrated routing and bridging (irb) interface in leaf1 to allow inter-subnet L3 connectivity.
+
+
+Server | IP Address
+---|---
+h1 | 192.168.1.11/24
+h2 | 192.168.1.12/24
+h3 | 192.168.1.13/24
+h4 | 192.168.2.11/24
+sflow | 192.168.3.11/24
 
 
 ### Verification and Troubleshooting
@@ -166,7 +169,7 @@ The IMET/RT3 routes can be viewed in summary and detailed modes:
 When the IMET routes from leaf2 are imported for vrf-1 network-instance, the corresponding multicast VXLAN destinations are added and can be checked with the following command:
 
 ```
-# show tunnel-interface vxlan1 vxlan-interface 1 bridge-table multicast-destinations destination * 
+# show tunnel-interface vxlan1 vxlan-interface 1 bridge-table multicast-destinations destination *
 ```
 
 
@@ -188,4 +191,38 @@ When the leafs exchanged only EVPN IMET routes they build the BUM flooding tree 
 # show tunnel-interface vxlan1 vxlan-interface 1 bridge-table unicast-destinations destination *
 ```
 
+*Note: as of the time of this writing, you will be able to ping from h1 to h2 and h3 (on the same subnet) and from h1 to h4 and sFlow server as expected. However, ping from h2 and h3 to severs on remote subnets is not successful. I am still troubleshooting the issue.*
 
+## Alternative Lab Topology
+
+To be able to experiment with srlinux quickly, a smaller topology file is added. The smaller DC topology consists of one spine switch, two leaf switches, and four servers connected to the leaf switches as follows:
+   - Server1 and Server3 are connected to leaf r1
+   - Server2 and Server4 are connected to leaf r3
+- Server1 and Server2 reside on the same subnet and the need to communicate at layer 2
+- Server3 and Server4 are on separate subnets
+
+
+
+![Tiny Lab Topology](spine_leaf_tiny.png)
+
+The goal of the configuration is to allow connectivity among all servers over the DC fabric.
+
+Similar to the main topology, the router are configured to run eBGP to create an underlay infrastructure. EVPN and VxLAN are configured using iBGP as an overlay. Unlike the main topology, route reflector is not needed for this topology.
+
+The IP addresses of the servers:
+
+Server | IP Address
+---|---
+h1 | 192.168.1.11/24
+h2 | 192.168.1.12/24
+h3 | 192.168.3.11/24
+h4 | 192.168.4.11/24
+
+*Note: as of the time of this writing, you will be able to ping from h1 to h2 (on the same subnet) and from h1 to h3 and h4 as expected. However, ping from h2 to h3 and h4 is not successful. I am still troubleshooting the issue.*
+
+## References
+
+The above configuration is based on the following tutorials:
+
+- [Nokia Tutorial](https://learn.srlinux.dev/tutorials/)
+- [Another Tutorial](https://networkcloudandeverything.com/configuring-srlinux-nodes-in-a-3-tier-data-center/)
