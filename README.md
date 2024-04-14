@@ -16,15 +16,15 @@ This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/inde
 For more information about creating Containerlab topologies using srlinux, consult [this resource](https://containerlab.dev/manual/kinds/srl/#__tabbed_1_5).
 
 
-There are two topologies included in this lab. The main topology include six routers and five servers, including a network management server.
+There are two topologies included in this lab. The main topology include six routers and five servers, including a network management server. The second topology is smaller and it includes three switches and four servers.
+
+The lab includes start-up router configuration files for both topologies that feature VxLAN implementation over the underlay DC fabric.
+
 
 ![Lab Topology #1](docs/main_topo.png)
 
-The second topology is smaller and it includes three switches and four servers.
+![Lab Topology #2](docs/tiny_topo.png)
 
-![Lab Topology #2](docs/main_topo.png)
-
-The lab includes start-up router configuration files featuring VxLAN implementation over the underlay DC fabric.
 
 # Starting and stopping the lab
 
@@ -51,7 +51,6 @@ To stop the lab
 ```
 $ sudo clab destroy -t tiny.clab.yaml --cleanup
 ```
-
 
 # Nokia Switch Access
 
