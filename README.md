@@ -2,7 +2,7 @@
 
 [![Static Badge](https://img.shields.io/badge/Docs-github.io-blue)](https://martimy.github.io/clab_srl_dcn)
 
-This is lab builds a network tpology using Nokia [Service Router Linux](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/) (srlinux) and Conatinerlab.
+This is lab builds a spine-leaf data centre network using Nokia [Service Router Linux](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/) (srlinux) and Conatinerlab. The lab documentation can be found [here](docs/index.md).
 
 The main features of Nokia srlinux can be found [here](https://learn.srlinux.dev/) and they include:
 
@@ -11,19 +11,22 @@ The main features of Nokia srlinux can be found [here](https://learn.srlinux.dev
 
 Nokia SRLinux can be managed with CLI, gNMI, JSON-RPC, and SNMP.
 
-Here is the link to [router documentation](https://documentation.nokia.com/srlinux/index.html). This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/index.html).
+This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/index.html), which is not the latest but the container size is smaller.
 
-For more information about creating Containerlab topologies using srlinux, consult [this](https://containerlab.dev/manual/kinds/srl/#__tabbed_1_5).
+For more information about creating Containerlab topologies using srlinux, consult [this resource](https://containerlab.dev/manual/kinds/srl/#__tabbed_1_5).
 
 
-![Lab Topology](docs/spineleaf.png)
+There are two topologies included in this lab. The main topology include six routers and five servers, including a network management server.
 
-The lab documentation is [here](docs/index.md)
+![Lab Topology #1](docs/main_topo.png)
+
+The second topology is smaller and it includes three switches and four servers.
+
+![Lab Topology #2](docs/main_topo.png)
+
+The lab includes start-up router configuration files featuring VxLAN implementation over the underlay DC fabric.
 
 # Starting and stopping the lab
-
-
-This lab includes two topologies. 
 
 To start the lab's main topology:
 
@@ -37,7 +40,7 @@ To stop the lab
 $ sudo clab destroy -t srl-dc.clab.yaml --cleanup
 ```
 
-To start the lab's secondary (smaller) topology:
+To start the lab's smaller topology:
 
 ```
 $ sudo clab deploy -t tiny.clab.yaml
@@ -70,7 +73,7 @@ To exit, type 'quit'.
 3. SNMP Connectivity
 
     To test SNMP connection (using default community string):
-    
+
     ```
     $ docker exec -it clab-srl-mgm snmpwalk -v 2c -c public 172.20.20.11
     ```
@@ -132,7 +135,7 @@ docker run -it --rm --privileged --net container:clab-tiny-r2 akpinar/alpine:lat
 est tshark -i e1-12
 ```
 
-or 
+or
 
 ```
 docker run -it --rm --net container:clab-tiny-r2 nicolaka/netshoot tshark -i e1-12

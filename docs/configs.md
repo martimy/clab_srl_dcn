@@ -1,6 +1,9 @@
 # Configuration Overview
 
-This is still work in-progress.
+The following is brief description of the router configuration in this lab. This is still work in-progress and more detail will be added later. Please consult the [router documentation](https://documentation.nokia.com/srlinux/index.html) for more information.
+
+Note: This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/index.html), which is not the latest but the container size is smaller.
+
 
 ## Main Lab Topology
 
