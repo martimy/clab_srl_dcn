@@ -7,7 +7,7 @@ This is lab builds a spine-leaf data centre network using Nokia [Service Router 
 The main features of Nokia srlinux can be found [here](https://learn.srlinux.dev/) and they include:
 
 - [Open Architucture](https://documentation.nokia.com/srlinux/SR_Linux_HTML_R21-11/Configuration_Basics_Guide/configb-apps.html)
-- [Groud-up support of YANG](https://learn.srlinux.dev/programmability/)
+- [Ground-up support of YANG](https://learn.srlinux.dev/programmability/)
 
 Nokia SRLinux can be managed with CLI, gNMI, JSON-RPC, and SNMP.
 
