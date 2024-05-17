@@ -2,6 +2,8 @@
 
 # https://github.com/openconfig/gnmic
 # https://github.com/karimra/gnmic-nanog87
+# https://aristanetworks.github.io/openmgmt/examples/gnmi-clients/gnmic/
+
 
 Install gNMIc on the host or use Docker
 
@@ -36,3 +38,9 @@ gnmic --config .gnmic.yaml -a 172.20.20.2 set \
 gnmic --config gnmic.yaml set --update-path /system/sflow --update-file sflow_update.yaml
 
 gnmic --config gnmic.yaml set --update-path /system/sflow --update-file sflow_update.yaml
+
+
+# Routing
+
+./gnmic_cmd.sh clab-basic-s1 get --path network-instance[name=default]/route-table
+

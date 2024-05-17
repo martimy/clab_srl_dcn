@@ -1,6 +1,11 @@
 #!/bin/bash
 
+USER="admin"
+PASSWORD="admin"
 
-docker run --net host --rm ghcr.io/openconfig/gnmic -a 172.20.20.2 \
-       --skip-verify -u admin -p admin -e json_ietf \
-       $@
+NODE=$1
+shift
+OTHERS="$@"
+
+docker run --net host --rm ghcr.io/openconfig/gnmic -a $NODE \
+       --skip-verify -u $USER -p $PASSWORD -e json_ietf $OTHERS
