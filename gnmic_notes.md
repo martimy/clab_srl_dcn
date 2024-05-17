@@ -42,5 +42,10 @@ gnmic --config gnmic.yaml set --update-path /system/sflow --update-file sflow_up
 
 # Routing
 
-./gnmic_cmd.sh clab-basic-s1 get --path network-instance[name=default]/route-table
+$ ./gnmic_cmd.sh clab-basic-s1 get --path /network-instance/route-table/ipv4-unicast/
+
+$ ./gnmic_cmd.sh clab-basic-s1 get --path network-instance[name=default]/route-table
+
+$ ./gnmic_cmd.sh clab-basic-s1 get --path /network-instance/protocols/bgp/neighbor
+
 
