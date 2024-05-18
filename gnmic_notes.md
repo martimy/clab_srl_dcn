@@ -1,8 +1,8 @@
 
 
-# https://github.com/openconfig/gnmic
-# https://github.com/karimra/gnmic-nanog87
-# https://aristanetworks.github.io/openmgmt/examples/gnmi-clients/gnmic/
+[ref1](https://github.com/openconfig/gnmic)
+[ref2](https://github.com/karimra/gnmic-nanog87)
+[ref3](https://aristanetworks.github.io/openmgmt/examples/gnmi-clients/gnmic/)
 
 
 Install gNMIc on the host or use Docker
@@ -47,5 +47,3 @@ $ ./gnmic_cmd.sh clab-basic-s1 get --path /network-instance/route-table/ipv4-uni
 $ ./gnmic_cmd.sh clab-basic-s1 get --path network-instance[name=default]/route-table
 
 $ ./gnmic_cmd.sh clab-basic-s1 get --path /network-instance/protocols/bgp/neighbor
-
-

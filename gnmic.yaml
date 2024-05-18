@@ -1,5 +1,0 @@
-address: 172.20.20.2
-username: admin
-password: admin
-skip-verify: true
-encoding: json_ietf
