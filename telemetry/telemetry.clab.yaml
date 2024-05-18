@@ -5,7 +5,7 @@ prefix: ""
 # Define default settings for nodes in the topology
 topology:
   defaults:
-    kind: nokia_srlinux  # Specify the kind of nodes as Nokia SR Linux
+    kind: linux  # Specify the kind of nodes as Nokia SR Linux
 
   kinds:
     nokia_srlinux:
@@ -19,6 +19,7 @@ topology:
   nodes:
     # Spine switches
     spine1:
+      kind: nokia_srlinux
       startup-config: config/basic-s1.cfg  # Specify the startup configuration file for s1
       mgmt-ipv4: 172.20.20.11  # Management IPv4 address for s1
       group: spine  # Group s1 under the spine category
@@ -29,14 +30,17 @@ topology:
 
     # Leaf switches
     leaf1:
+      kind: nokia_srlinux
       startup-config: config/basic-l1.cfg
       mgmt-ipv4: 172.20.20.21
       group: leaf
     leaf2:
+      kind: nokia_srlinux
       startup-config: config/basic-l2.cfg
       mgmt-ipv4: 172.20.20.22
       group: leaf
     leaf3:
+      kind: nokia_srlinux
       startup-config: config/basic-l3.cfg
       mgmt-ipv4: 172.20.20.23
       group: leaf
@@ -44,24 +48,20 @@ topology:
 
     # Servers
     host1:
-      kind: linux
       exec:
         - ip addr add 192.168.1.11/24 dev eth1
         - ip route replace default via 192.168.1.1 dev eth1
     host2:
-      kind: linux
       exec:
         - ip addr add 192.168.2.11/24 dev eth1
         - ip route replace default via 192.168.2.1 dev eth1
     host3:
-      kind: linux
       exec:
         - ip addr add 192.168.3.11/24 dev eth1
         - ip route replace default via 192.168.3.1 dev eth1
 
     # Telemetry
     gnmic:
-      kind: linux
       mgmt-ipv4: 172.20.20.41
       image: ghcr.io/openconfig/gnmic:0.33.0
       # env:
@@ -69,6 +69,16 @@ topology:
       binds:
         - gnmic-config.yaml:/gnmic-config.yaml:ro
       cmd: --config /gnmic-config.yaml --log subscribe
+      group: "10"
+
+    prometheus:
+      mgmt-ipv4: 172.20.20.42
+      image: prom/prometheus
+      binds:
+        - prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+      cmd: --config.file=/etc/prometheus/prometheus.yaml
+      ports:
+        - 9090:9090
       group: "10"
 
   # Define links between nodes

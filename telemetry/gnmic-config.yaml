@@ -48,17 +48,17 @@ subscriptions:
 # trim-prefixes: Processor to trim path prefixes from the data
 
 outputs:
-  # prom:
-  #   type: prometheus
-  #   listen: :9273
-  #   path: /metrics
-  #   metric-prefix: gnmic
-  #   append-subscription-name: true
-  #   export-timestamps: true
-  #   debug: false
-  #   event-processors:
-  #     - trim-prefixes
-  #     - up-down-map
+  prom:
+    type: prometheus
+    listen: :9273
+    path: /metrics
+    metric-prefix: gnmic
+    append-subscription-name: true
+    export-timestamps: true
+    debug: false
+    event-processors:
+      - trim-prefixes
+      - up-down-map
   # stdout:
   #   type: file
   #   file-type: stdout
