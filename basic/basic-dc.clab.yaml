@@ -1,101 +1,92 @@
-# Define the containerlab topology named "srl"
-name: basic
+# Define the containerlab topology named "telemetry"
+name: telemetry
+prefix: ""
 
 # Define default settings for nodes in the topology
 topology:
   defaults:
     kind: nokia_srlinux  # Specify the kind of nodes as Nokia SR Linux
-    type: ixrd3  # Specify the type of SR Linux nodes
-    image: ghcr.io/nokia/srlinux:21.11.2  # Specify the Docker image for SR Linux nodes
+
+  kinds:
+    nokia_srlinux:
+      type: ixrd3  # Specify the type of SR Linux nodes
+      image: ghcr.io/nokia/srlinux:23.10.1  # Specify the Docker image for SR Linux nodes
+    linux:
+      image: akpinar/alpine:latest
+      group: server
 
   # Define individual nodes in the topology
   nodes:
     # Spine switches
-    s1:
+    spine1:
       startup-config: config/basic-s1.cfg  # Specify the startup configuration file for s1
       mgmt-ipv4: 172.20.20.11  # Management IPv4 address for s1
       group: spine  # Group s1 under the spine category
-
-    s2:
+    spine2:
       startup-config: config/basic-s2.cfg
       mgmt-ipv4: 172.20.20.12
       group: spine
 
     # Leaf switches
-    l1:
+    leaf1:
       startup-config: config/basic-l1.cfg
       mgmt-ipv4: 172.20.20.21
       group: leaf
-
-    l2:
+    leaf2:
       startup-config: config/basic-l2.cfg
       mgmt-ipv4: 172.20.20.22
       group: leaf
-
-    l3:
+    leaf3:
       startup-config: config/basic-l3.cfg
       mgmt-ipv4: 172.20.20.23
       group: leaf
 
 
     # Servers
-    h1:
+    host1:
       kind: linux
-      image: akpinar/alpine:latest
       exec:
         - ip addr add 192.168.1.11/24 dev eth1
         - ip route replace default via 192.168.1.1 dev eth1
-      group: server
-
-    h2:
+    host2:
       kind: linux
-      image: akpinar/alpine:latest
       exec:
         - ip addr add 192.168.2.11/24 dev eth1
         - ip route replace default via 192.168.2.1 dev eth1
-      group: server
-
-    h3:
+    host3:
       kind: linux
-      image: akpinar/alpine:latest
-      exec:
-        - ip addr add 192.168.2.12/24 dev eth1
-        - ip route replace default via 192.168.2.1 dev eth1
-      group: server
-
-    h4:
-      kind: linux
-      image: akpinar/alpine:latest
       exec:
         - ip addr add 192.168.3.11/24 dev eth1
         - ip route replace default via 192.168.3.1 dev eth1
-      group: server
 
-
-    # Management node
-    mgm:
+    # Telemetry
+    gnmic:
       kind: linux
-      image: nicolaka/netshoot
-      mgmt-ipv4: 172.20.20.201
-      group: server
+      mgmt-ipv4: 172.20.20.41
+      image: ghcr.io/openconfig/gnmic:0.33.0
+      # env:
+      #   TZ:"America/Halifax"
+      binds:
+        - gnmic-config.yaml:/gnmic-config.yaml:ro
+      cmd: --config /gnmic-config.yaml --log subscribe
+      group: "10"
 
   # Define links between nodes
   links:
     # Spine 1 to leaves and border
-    - endpoints: ["s1:e1-11", "l1:e1-11"]
-    - endpoints: ["s1:e1-12", "l2:e1-11"]
-    - endpoints: ["s1:e1-13", "l3:e1-11"]
+    - endpoints: ["spine1:e1-11", "leaf1:e1-11"]
+    - endpoints: ["spine1:e1-12", "leaf2:e1-11"]
+    - endpoints: ["spine1:e1-13", "leaf3:e1-11"]
 
     # Spine 2 to leaves and border
-    - endpoints: ["s2:e1-11", "l1:e1-12"]
-    - endpoints: ["s2:e1-12", "l2:e1-12"]
-    - endpoints: ["s2:e1-13", "l3:e1-12"]
+    - endpoints: ["spine2:e1-11", "leaf1:e1-12"]
+    - endpoints: ["spine2:e1-12", "leaf2:e1-12"]
+    - endpoints: ["spine2:e1-13", "leaf3:e1-12"]
 
     # Leaves to hosts
-    - endpoints: ["l1:e1-21", "h1:eth1"]
-    - endpoints: ["l2:e1-21", "h2:eth1"]
-    - endpoints: ["l2:e1-22", "h3:eth1"]
-    - endpoints: ["l3:e1-21", "h4:eth1"]
+    - endpoints: ["leaf1:e1-21", "host1:eth1"]
+    - endpoints: ["leaf2:e1-21", "host2:eth1"]
+    - endpoints: ["leaf3:e1-21", "host3:eth1"]
 
 # Define management subnet information
 mgmt:
