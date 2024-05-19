@@ -1,3 +1,6 @@
+# gNMIc configuration file
+# Modified from https://github.com/srl-labs/srl-telemetry-lab
+
 username: admin
 password: NokiaSrl1!
 port: 57400
@@ -19,34 +22,70 @@ targets:
 #   - stream mode indicates continuous updates.
 #   - sample stream mode indicates periodic sampling of data.
 subscriptions:
+  srl_net_instance:
+    paths:
+      - /network-instance[name=*]/oper-state
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
+
   srl_if_oper_state:
     paths:
       - /interface[name=ethernet-1/*]/oper-state
     mode: stream
     stream-mode: sample
-    sample-interval: 5s
+    sample-interval: 10s
+
+  srl_if_stats:
+    paths:
+      - /interface[name=ethernet-1/*]/statistics
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
+
+  srl_if_traffic_rate:
+    paths:
+      - /interface[name=ethernet-1/*]/traffic-rate
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
+
+  srl_cpu:
+    paths:
+      - /platform/control[slot=*]/cpu[index=all]/total
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
+
+  srl_mem:
+    paths:
+      - /platform/control[slot=*]/memory
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
+
+  srl_bgp_stats:
+    paths:
+      - /network-instance[name=*]/protocols/bgp/statistics
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
+
+  srl_ipv4_routes:
+    paths:
+      - /network-instance[name=*]/route-table/ipv4-unicast/statistics/
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
+
+  srl_apps:
+    paths:
+      - /system/app-management/application[name=*]
+    mode: stream
+    stream-mode: sample
+    sample-interval: 10s
 
 # Outputs defines where to send the subscribed data.
-
-# prom: is the name given to this output configuration.
-# type: prometheus: Specifies that this output is of the Prometheus type, meaning that the data will be formatted in a way that Prometheus can scrape and ingest it.
-# listen: :9273: Specifies the address and port on which this service will listen for Prometheus to scrape the metrics. The :9273 means it will listen on port 9273 on all network interfaces.
-# path: /metrics: The URL path where the Prometheus server will scrape the metrics from. Prometheus will look for metrics at http://<host>:9273/metrics.
-# metric-prefix: gnmic: A prefix added to all metrics names. This helps in distinguishing the metrics from gnmic in Prometheus.
-# append-subscription-name: true: If true, the subscription name (e.g., srl_if_oper_state) will be appended to the metric names. This helps in identifying the source subscription of the metrics.
-# export-timestamps: true: If true, the timestamps of the telemetry data will be exported along with the metrics. This is useful for time-series analysis in Prometheus.
-# debug: false: If set to true, enables debug mode for this output, providing more verbose logging for troubleshooting.
-# event-processors: A list of processors that will be applied to the events before they are exported to Prometheus.
-# trim-prefixes: This processor removes specified prefixes from the metric names or paths.
-# up-down-map: This processor replaces string values (like "up" and "down") with integers (e.g., "up" to "1" and "down" to "0").
-
-# stdout: Sends the output to the standard output (console).
-# type: Specifies the output type (file, but in this case it is the console).
-# file-type: Specifies the file type (stdout).
-# event-processors: Lists processors to apply to the events before output.
-# proc-convert-strings-to-int: Processor to convert string values to integers.
-# trim-prefixes: Processor to trim path prefixes from the data
-
 outputs:
   prom:
     type: prometheus
@@ -59,20 +98,6 @@ outputs:
     event-processors:
       - trim-prefixes
       - up-down-map
-  # stdout:
-  #   type: file
-  #   file-type: stdout
-  #   event-processors:
-  #     - proc-convert-strings-to-int
-  #     - trim-prefixes
-
-  # file_output:
-  #   type: file
-  #   file-type: text
-  #   file: outputfile.txt
-  #   event-processors:
-  #     - proc-convert-strings-to-int
-  #     - trim-prefixes
 
 # Processors defines how to process the data.
 processors:
@@ -83,6 +108,7 @@ processors:
       transforms:
         - path-base:
             apply-on: "name"
+  # Change oper-state from "up/down" to "1/0"
   up-down-map:
     event-strings:
       value-names:

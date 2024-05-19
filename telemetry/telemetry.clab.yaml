@@ -4,13 +4,15 @@ prefix: ""
 
 # Define default settings for nodes in the topology
 topology:
+  # Specify the default kind
   defaults:
-    kind: linux  # Specify the kind of nodes as Nokia SR Linux
+    kind: linux
 
+  # Specify the defaults for each kind
   kinds:
     nokia_srlinux:
-      type: ixrd3  # Specify the type of SR Linux nodes
-      image: ghcr.io/nokia/srlinux:23.10.1  # Specify the Docker image for SR Linux nodes
+      type: ixrd3
+      image: ghcr.io/nokia/srlinux:23.10.1
     linux:
       image: akpinar/alpine:latest
       group: server
@@ -24,6 +26,7 @@ topology:
       mgmt-ipv4: 172.20.20.11  # Management IPv4 address for s1
       group: spine  # Group s1 under the spine category
     spine2:
+      kind: nokia_srlinux
       startup-config: config/basic-s2.cfg
       mgmt-ipv4: 172.20.20.12
       group: spine
@@ -45,7 +48,6 @@ topology:
       mgmt-ipv4: 172.20.20.23
       group: leaf
 
-
     # Servers
     host1:
       exec:
@@ -60,10 +62,10 @@ topology:
         - ip addr add 192.168.3.11/24 dev eth1
         - ip route replace default via 192.168.3.1 dev eth1
 
-    # Telemetry
+    # Telemetry nodes
     gnmic:
-      mgmt-ipv4: 172.20.20.41
       image: ghcr.io/openconfig/gnmic:0.33.0
+      mgmt-ipv4: 172.20.20.41
       # env:
       #   TZ:"America/Halifax"
       binds:
@@ -72,13 +74,32 @@ topology:
       group: "10"
 
     prometheus:
-      mgmt-ipv4: 172.20.20.42
       image: prom/prometheus
+      mgmt-ipv4: 172.20.20.42
       binds:
         - prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
       cmd: --config.file=/etc/prometheus/prometheus.yaml
       ports:
         - 9090:9090
+      group: "10"
+
+    grafana:
+      image: grafana/grafana
+      mgmt-ipv4: 172.20.20.43
+      binds:
+        - grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+        - grafana/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
+        - grafana/dashboards:/var/lib/grafana/dashboards
+      ports:
+        - 3000:3000
+      env:
+        GF_INSTALL_PLUGINS: knightss27-weathermap-panel, https://algenty.github.io/flowcharting-repository/archives/agenty-flowcharting-panel-1.0.0d.220606199-SNAPSHOT.zip;agenty-flowcharting-panel
+
+        # env vars to enable anonymous access
+        GF_ORG_ROLE: "Admin"
+        GF_ORG_NAME: "Main Org"
+        GF_AUTH_ANONYMOUS_ENABLED: "true"
+        GF_AUTH_ANONYMOUS: "true"
       group: "10"
 
   # Define links between nodes
