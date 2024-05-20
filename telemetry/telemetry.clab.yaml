@@ -93,8 +93,7 @@ topology:
       ports:
         - 3000:3000
       env:
-        GF_INSTALL_PLUGINS: knightss27-weathermap-panel, https://algenty.github.io/flowcharting-repository/archives/agenty-flowcharting-panel-1.0.0d.220606199-SNAPSHOT.zip;agenty-flowcharting-panel
-
+        GF_INSTALL_PLUGINS: knightss27-weathermap-panel
         # env vars to enable anonymous access
         GF_ORG_ROLE: "Admin"
         GF_ORG_NAME: "Main Org"
