@@ -1,8 +1,7 @@
-# Data Centre Lab using Nokia Service Router Linux
+# Network Topologies using Nokia Service Router Linux
 
-[![Static Badge](https://img.shields.io/badge/Docs-github.io-blue)](https://martimy.github.io/clab_srl_dcn)
 
-This is lab builds a spine-leaf data centre network using Nokia [Service Router Linux](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/) (srlinux) and Conatinerlab. The lab documentation can be found [here](docs/index.md).
+This repository includes three labs that build spine-leaf data centre networks using Nokia [Service Router Linux](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/) (srlinux) and Conatinerlab. The labs documentation can be found [here](docs/index.md).
 
 The main features of Nokia srlinux can be found [here](https://learn.srlinux.dev/) and they include:
 
@@ -11,45 +10,19 @@ The main features of Nokia srlinux can be found [here](https://learn.srlinux.dev
 
 Nokia SRLinux can be managed with CLI, gNMI, JSON-RPC, and SNMP.
 
-This lab uses [Release 21.11](https://documentation.nokia.com/srlinux/21-11/index.html), which is not the latest but the container size is smaller.
-
 For more information about creating Containerlab topologies using srlinux, consult [this resource](https://containerlab.dev/manual/kinds/srl/#__tabbed_1_5).
 
+The labs included in this repository construct three topologies:
 
-There are two topologies included in this lab. The main topology include six routers and five servers, including a network management server. The second topology is smaller and it includes three switches and four servers.
+1. A small topology that includes three switches and four servers. This topology demonstrates the configuration of VxLAN.  
+2. A spine-leaf topology that includes six routers and five servers. This topology also demonstrates the configuration of VxLAN using a different approach.
+3. A spine-leaf topology that includes five routers and three servers. This topology demonstrates the use of gNMIc to collect telemetry from the  network.
 
-The lab includes start-up router configuration files for both topologies that feature VxLAN implementation over the underlay DC fabric.
-
-
-![Lab Topology #1](docs/main_topo.png)
-
-![Lab Topology #2](docs/tiny_topo.png)
-
-
-# Starting and stopping the lab
-
-To start the lab's main topology:
+To use one of these labs, switch the to corresponding directory and start the lab. For example:
 
 ```
-$ sudo clab deploy -t srl-dc.clab.yaml
-```
-
-To stop the lab
-
-```
-$ sudo clab destroy -t srl-dc.clab.yaml --cleanup
-```
-
-To start the lab's smaller topology:
-
-```
-$ sudo clab deploy -t tiny.clab.yaml
-```
-
-To stop the lab
-
-```
-$ sudo clab destroy -t tiny.clab.yaml --cleanup
+$ cd tiny
+tiny$ sudo clab deploy
 ```
 
 # Nokia Switch Access
