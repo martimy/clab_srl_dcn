@@ -4,6 +4,8 @@ This lab demonstrates the use of gNMIc to receive telemetry from a network consi
 
 In this lab topology, gNMIc sends the telemetry to Prometheus. Grafana visualizes the data with help of Network Weathermap plugin.
 
+You can find more about gNMIc in my [blog post](http://adhocnode.com/introduction-to-gnmic/).
+
 ![grafana](grafana.png)
 
 ## Usage
