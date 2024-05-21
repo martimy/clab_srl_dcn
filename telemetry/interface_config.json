@@ -1,0 +1,7 @@
+{
+  "admin-state": "enable",
+  "subinterface": {
+     "index": 0,
+     "admin-state": "enable"
+  }
+}
