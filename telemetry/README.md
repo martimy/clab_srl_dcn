@@ -35,3 +35,7 @@ To stop the lab:
 ```
 telemetry$ sudo destroy --cleanup
 ```
+
+## Using gNMIc
+
+To learn more about using gNMIc, review the examples provided in this [file](gnmic_examples.md).
