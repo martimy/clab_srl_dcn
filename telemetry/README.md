@@ -38,4 +38,6 @@ telemetry$ sudo destroy --cleanup
 
 ## Using gNMIc
 
-To learn more about using gNMIc, review the examples provided in this [file](gnmic_examples.md).
+To learn more about using gNMIc, review the examples provided in this [file](gnmic_examples.md). This document provides introduction to [YANG and XPATHs](../docs/yang_xpath.md).
+
+Use this [example](config_example.md) to enable ECMP in the Network.
