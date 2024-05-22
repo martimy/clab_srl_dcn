@@ -1,6 +1,6 @@
-## Configuration Example
+# ECMP Configuration
 
-The routers' startup configuration provided in the lab does not enable ECMP (Equal-cost multi-path routing) on BGP routes. This example shows how to use gNMIc to enable ECMP on the routers using YANG models.
+The routers' startup configuration provided in the lab does not enable ECMP (Equal-cost multi-path routing) on BGP routes. This document shows how to use gNMIc to enable ECMP on the routers using YANG models.
 
 First, to verify the status of ECMP on a router, login to the router and use a show command to display the routing table:
 
