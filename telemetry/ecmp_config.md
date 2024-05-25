@@ -285,7 +285,7 @@ The output should look like the following, which indicates that update is succes
 <output ommitted>
 ```
 
-# Using `generate set-request` Command
+## Using `generate set-request` Command
 
 The set-request sub command generates a request file given a list of update/replace paths. The generated file can be used with `set` command and `--request-file` flag. The file can be useful to perfom a set of complex configuration operations and it can be used also to create configuration templates.
 
