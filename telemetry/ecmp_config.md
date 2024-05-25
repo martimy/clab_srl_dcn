@@ -112,10 +112,12 @@ $ gnmic path --file srlinux-yang-models --config-only | grep multipath
 
 Note that there three path that relate to the multipath configuration whose parent path is: `/network-instance[name=*]/protocols/bgp/afi-safi[afi-safi-name=*]/multipath/`
 
+## Using `generate` command
+
 The `generate` command takes the target's YANG models as input and generates the paths required and the configuration payloads needed to update or replace the path using the `set` command. The `--file` flag points to the YANG model directory.
 
 ```
-$ gnmic -a leaf1 generate \
+$ gnmic generate \
 --file srlinux-yang-models \
 --path /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=*]/multipath/
 allow-multiple-as:
@@ -159,13 +161,13 @@ $ gnmic -a leaf1,leaf2,leaf3,spine1,spine2 --skip-verify -e json_ietf set \
 [spine1]     }
 [spine1]   ]
 [spine1] }
-<output-ommitted>
+<output ommitted>
 ```
 
 To verify that the update is successful, use the previous commands:
 
 ```
-gnmic -a leaf1 --skip-verify -e json_ietf get --path /network-instance/route-table/ipv4-unicast/statistics/active-routes-with-ecmp
+$ gnmic -a leaf1 --skip-verify -e json_ietf get --path /network-instance/route-table/ipv4-unicast/statistics/active-routes-with-ecmp
 [
   {
     "source": "leaf1",
@@ -232,3 +234,116 @@ A:leaf1# show network-instance default protocols bgp routes ipv4 summary
 18 available destinations: 6 with ECMP multipaths
 ------------------------------------------------------------------------------
 ```
+
+# Using `--update-file` Flag
+
+
+The previous approach works well with small updates. For more complex configuration, we may need to update/replace the configuration using configuration files instead. To perfom the same function as above, you we need to use the commands below:
+
+First, direct the output of the `generate` command to a file:
+
+```
+$ gnmic generate --file srlinux-yang-models --path /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=*]/multipath > ecmp_config.yaml
+```
+
+Edit the `ecmp_config.yaml` file to match the following:
+
+```
+allow-multiple-as: true
+max-paths-level-1: 32
+max-paths-level-2: 32
+```
+
+Use the `set` command with the flag `--update-file`:
+
+```
+$ gnmic -a leaf1,leaf2,leaf3,spine1,spine2 --skip-verify -e json_ietf set \
+--update-path /network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=*]/multipath \
+--update-file ecmp_config.yaml
+```
+
+The output should look like the following:
+
+```
+[leaf3] {
+[leaf3]   "source": "leaf3",
+[leaf3]   "timestamp": 1716643248109869583,
+[leaf3]   "time": "2024-05-25T10:20:48.109869583-03:00",
+[leaf3]   "results": [
+[leaf3]     {
+[leaf3]       "operation": "UPDATE",
+[leaf3]       "path": "network-instance[name=default]/protocols/bgp/afi-safi[afi-safi-name=*]/multipath"
+[leaf3]     }
+[leaf3]   ]
+[leaf3] }
+[leaf2] {
+<output ommitted>
+```
+
+# Using `generate set-request` Command
+
+The 'generate' command works well with small updates. For more complex configuration, we may need to update/replace the configuration using configuration files instead. The `generate set-request` commad generates the required configuration file in YAML (default) or JSON format. To perfom the same function as above, you we need to use the command below:
+
+The set-request sub command generates a request file given a list of update and/or replace paths. The generated file can be manually edited and used with `set` command. The file can be useful to perfom a set of complex configuration update/replace operations. The generated file can also be used to create configuration templates.
+
+Generate the request file:
+
+```
+$ gnmic generate set-request \
+--file srlinux-yang-models \
+--update /network-instance[name=default]/protocols/bgp/afi-safi/multipath > ecmp_request.yaml
+```
+
+The generated YAML file is:
+
+```yaml
+updates:
+- path: /network-instance[name=default]/protocols/bgp/afi-safi/multipath
+  value:
+    allow-multiple-as:
+    - "true"
+    max-paths-level-1:
+    - "1"
+    max-paths-level-2:
+    - "1"
+```
+
+Now, we can edit the file to change the max paths to, say, 16 then use the `set` command with `--request-file flag`:
+
+```yaml
+updates:
+- path: /network-instance[name=default]/protocols/bgp/afi-safi/multipath
+  value:
+    allow-multiple-as: true
+    max-paths-level-1: 16
+    max-paths-level-2: 16
+```
+
+```
+$ gnmic -a leaf1,leaf2,leaf3,spine1,spine2 --skip-verify -e json_ietf set \
+--request-file ecmp_request.yaml
+```
+
+The output will be:
+
+```
+[leaf2] {
+[leaf2]   "source": "leaf2",
+[leaf2]   "timestamp": 1716644297609868128,
+[leaf2]   "time": "2024-05-25T10:38:17.609868128-03:00",
+[leaf2]   "results": [
+[leaf2]     {
+[leaf2]       "operation": "UPDATE",
+[leaf2]       "path": "network-instance[name=default]/protocols/bgp/afi-safi/multipath"
+[leaf2]     }
+[leaf2]   ]
+[leaf2] }
+<output ommitted>
+```
+
+## Update vs Replace
+
+All previous examaples use "update" flags. The same commands can also be used with "replace" flags. There are several difference between the two, which are explained in the documentation. The main difference is:
+
+- The updates will change existing data elements or create new ones if the element does not exist.
+- The replace will change existing data elements but will not create new ones. A data element will be deleted if it is missing from the replace command.
