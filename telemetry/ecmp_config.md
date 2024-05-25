@@ -1,6 +1,6 @@
 # ECMP Configuration
 
-The routers' startup configuration provided in the lab does not enable ECMP (Equal-cost multi-path routing) on BGP routes. This document shows how to use gNMIc to enable ECMP on the routers using YANG models.
+The routers' startup configuration provided in the lab does not enable ECMP (Equal-cost multi-path routing) on BGP routes. This document shows how to use gNMIc to enable ECMP on the routers using YANG models. For more details, consult the [gNMIc Command reference](https://gnmic.openconfig.net/cmd/capabilities/).
 
 First, to verify the status of ECMP on a router, login to the router and use a show command to display the routing table:
 
@@ -28,10 +28,11 @@ IPv4 Total routes           : 20
 <output ommitted>
 ```
 
-Exit the router (type quit followed by ENTER or hit CTRL-D).
+Exit the router (type 'quit' followed by ENTER or hit CTRL-D).
 
+## Extract YANG models
 
-We need to use YANG models to get information form the routers as well as update the configuration. The YANG modeled data follows a tree-like hierarchy where each node can be uniquely identified with a schema path. Knowing the path to any YANG modeled data is necessary to manipulate it. To learn about the YANG models' paths used by the Nokia SR Linux router, we can extract this information from the router itself or refer to Nokia's [Path Browser](https://yang.srlinux.dev/v23.10.3) for the specific OS version used.
+We need to use YANG models to get information form the routers as well as update the configuration. The YANG modeled data follows a tree-like hierarchy where each node can be uniquely identified with a schema path. Knowing the path to any YANG modeled data is necessary to manipulate it. To learn about the YANG models' paths used by the Nokia SR Linux router, we can extract this information from the router itself or refer to Nokia's [Path Browser](https://yang.srlinux.dev/).
 
 We can extract the YANG models from the srlinux image using a shell script[^cr], which takes the OS version as input. The script saves the models into directory `srlinux-yang-models`:
 
@@ -97,7 +98,7 @@ $ gnmic -a leaf1 --skip-verify -e json_ietf get --path /network-instance/route-t
 ]
 ```
 
-Now, we will use the same approach to find the configuration path required to enable ECMP on the routers (with help from documentation, we can find that we need to use `multipath`):
+Now, we will use the same approach to find the configuration path required to enable ECMP on the routers (with help from documentation, we can find that we need to use `multipath` branch):
 
 ```
 $ gnmic path --file srlinux-yang-models --config-only | grep multipath
@@ -110,11 +111,11 @@ $ gnmic path --file srlinux-yang-models --config-only | grep multipath
 /network-instance[name=*]/protocols/ldp/multipath/max-paths
 ```
 
-Note that there three path that relate to the multipath configuration whose parent path is: `/network-instance[name=*]/protocols/bgp/afi-safi[afi-safi-name=*]/multipath/`
+Note that there are three leaf data elements under the parent `/network-instance[name=*]/protocols/bgp/afi-safi[afi-safi-name=*]/multipath/`
 
 ## Using `generate` command
 
-The `generate` command takes the target's YANG models as input and generates the paths required and the configuration payloads needed to update or replace the path using the `set` command. The `--file` flag points to the YANG model directory.
+The gNMIc `generate` command takes the target's YANG models as input and generates the paths required and the configuration payloads needed to update or replace the data elements using the `set` command. The `--file` flag points to the YANG model directory.
 
 ```
 $ gnmic generate \
@@ -128,7 +129,7 @@ max-paths-level-2:
 - "1"
 ```
 
-From the output of the generate command, we see that we need to increase the number of max-paths to a number higher that 1. We can use `set` command with flags `--update-path` and `--update-value`:
+From the output of the `generate` command, we see that we need to increase the number of max-paths to more than 1. We can use the `set` command with flags `--update-path` and `--update-value`:
 
 ```
 $ gnmic -a leaf1 --skip-verify -e json_ietf set \
@@ -146,6 +147,11 @@ $ gnmic -a leaf1,leaf2,leaf3,spine1,spine2 --skip-verify -e json_ietf set \
 --update-value 32 \
 --update-path /network-instance[name=default]/protocols/bgp/afi-safi/multipath/max-paths-level-2 \
 --update-value 32
+```
+
+The output is:
+
+```
 [spine1] {
 [spine1]   "source": "spine1",
 [spine1]   "timestamp": 1716298550676122192,
@@ -235,10 +241,9 @@ A:leaf1# show network-instance default protocols bgp routes ipv4 summary
 ------------------------------------------------------------------------------
 ```
 
-# Using `--update-file` Flag
+## Using `--update-file` Flag
 
-
-The previous approach works well with small updates. For more complex configuration, we may need to update/replace the configuration using configuration files instead. To perfom the same function as above, you we need to use the commands below:
+The previous approach works well with small updates. For more complex configuration, we may need to update/replace the configuration using configuration files instead. To perfom the same function as above, you we need to use the following commands:
 
 First, direct the output of the `generate` command to a file:
 
@@ -262,7 +267,7 @@ $ gnmic -a leaf1,leaf2,leaf3,spine1,spine2 --skip-verify -e json_ietf set \
 --update-file ecmp_config.yaml
 ```
 
-The output should look like the following:
+The output should look like the following, which indicates that update is successful:
 
 ```
 [leaf3] {
@@ -282,9 +287,7 @@ The output should look like the following:
 
 # Using `generate set-request` Command
 
-The 'generate' command works well with small updates. For more complex configuration, we may need to update/replace the configuration using configuration files instead. The `generate set-request` commad generates the required configuration file in YAML (default) or JSON format. To perfom the same function as above, you we need to use the command below:
-
-The set-request sub command generates a request file given a list of update and/or replace paths. The generated file can be manually edited and used with `set` command. The file can be useful to perfom a set of complex configuration update/replace operations. The generated file can also be used to create configuration templates.
+The set-request sub command generates a request file given a list of update/replace paths. The generated file can be used with `set` command and `--request-file` flag. The file can be useful to perfom a set of complex configuration operations and it can be used also to create configuration templates.
 
 Generate the request file:
 
@@ -294,7 +297,7 @@ $ gnmic generate set-request \
 --update /network-instance[name=default]/protocols/bgp/afi-safi/multipath > ecmp_request.yaml
 ```
 
-The generated YAML file is:
+The generated YAML file looks like the following:
 
 ```yaml
 updates:
