@@ -7,7 +7,7 @@ Nokia Service Router Linux (SR Linux) is an open and extensible network operatin
 - It is designed for automation; each network application has its own YANG data structure.
 - It a state-sharing architecture using protobufs, gRPC, and the lightweight Nokia Impart Database (IDB).
 
-Find more information [here](https://prod.nokia.com/networks/ip-networks/service-router-linux-NOS/).
+Find more information [here](https://www.nokia.com/networks/ip-networks/service-router-linux-NOS/).
 
 The following is some of the important information that you need for this lab:
 
@@ -28,7 +28,7 @@ Wildcards and Ranges are used in CLI commands to represent multiple values or a 
 
 These are some specific commands that you can use in the CLI to perform common tasks, such as `info` and `show` to display detailed information about a specific configuration or system state, `ping` and `traceroute` to test the network connectivity between two nodes in the network.
 
-For more information consult [this resource](https://learn.srlinux.dev/cli/)
+For more information consult [this resource](https://learn.srlinux.dev/cli/).
 
 ## Network Interfaces
 
